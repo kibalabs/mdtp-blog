@@ -50,5 +50,5 @@ jobs:
                 --env VIRTUAL_HOST=${url} \
                 --env LETSENCRYPT_HOST=${url} \
                 --env-file ~/.${NAME}.vars \
-                --volume /home/ec2-user/mdtp-blog-images:/var/lib/ghost/content/images \
+                --volume /home/ec2-user/mdtp-blog-content:/var/lib/ghost/content \
                 ${DOCKER_IMAGE}
