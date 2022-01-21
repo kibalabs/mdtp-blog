@@ -23,7 +23,7 @@ jobs:
     needs: deploy-app
     runs-on: ubuntu-latest
     env:
-      NAME: everypage-blog
+      NAME: mdtp-blog
       DOCKER_IMAGE: ghcr.io/${{ github.repository }}:latest
     steps:
       - name: executing remote ssh commands
