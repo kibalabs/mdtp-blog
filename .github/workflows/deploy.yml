@@ -1,0 +1,54 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+    env:
+      DOCKER_IMAGE: ghcr.io/${{ github.repository }}:latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Login to GitHub container registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+      - name: Build docker image
+        run: docker build --tag $DOCKER_IMAGE .
+      - name: Push to container registry
+        run: docker push $DOCKER_IMAGE
+  run-app:
+    needs: deploy-app
+    runs-on: ubuntu-latest
+    env:
+      NAME: mdtp-blog
+      DOCKER_IMAGE: ghcr.io/${{ github.repository }}:latest
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MDTPBOX_URL }}
+          username: ${{ secrets.MDTPBOX_USER }}
+          key: ${{ secrets.MDTPBOX_SSH_KEY }}
+          port: ${{ secrets.MDTPBOX_PORT }}
+          envs: DOCKER_IMAGE,NAME
+          script_stop: true
+          script: |
+            url="blog.milliondollartokenpage.com"
+            docker pull ${DOCKER_IMAGE}
+            docker stop ${NAME} && docker rm ${NAME} || true
+            docker run \
+                --name ${NAME} \
+                --detach \
+                --publish-all \
+                --restart unless-stopped \
+                --memory=256m \
+                --cpus=0.1 \
+                --env NAME=${NAME} \
+                --env VIRTUAL_HOST=${url} \
+                --env LETSENCRYPT_HOST=${url} \
+                --env-file ~/.${NAME}.vars \
+                --volume /home/ec2-user/mdtp-blog-content:/var/lib/ghost/content \
+                ${DOCKER_IMAGE}
