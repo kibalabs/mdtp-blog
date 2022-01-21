@@ -36,7 +36,7 @@ jobs:
           envs: DOCKER_IMAGE,NAME
           script_stop: true
           script: |
-            url="blog.everypagehq.com"
+            url="blog.milliondollartokenpage.com"
             docker pull ${DOCKER_IMAGE}
             docker stop ${NAME} && docker rm ${NAME} || true
             docker run \
@@ -50,5 +50,5 @@ jobs:
                 --env VIRTUAL_HOST=${url} \
                 --env LETSENCRYPT_HOST=${url} \
                 --env-file ~/.${NAME}.vars \
-                --volume /home/ec2-user/blog-images:/var/lib/ghost/content/images \
+                --volume /home/ec2-user/mdtp-blog-images:/var/lib/ghost/content/images \
                 ${DOCKER_IMAGE}
