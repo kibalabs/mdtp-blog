@@ -1,1 +1,1 @@
-FROM ghost:4.32.3
+FROM ghost:4.47.1
