@@ -7,7 +7,6 @@ COPY ./theme-casper/yarn.lock .
 RUN yarn install
 COPY ./theme-casper/ .
 RUN yarn zip
-RUN ls
 
 FROM ghost:5.2.3
 
@@ -15,4 +14,3 @@ RUN apt-get update -y && apt-get install -y zip
 
 COPY --from=build /app/dist /var/lib/ghost/content.orig/themes
 RUN find /var/lib/ghost/content.orig/themes/ -name '*.zip' -exec sh -c 'unzip -d "${1%.*}" "$1"' _ {} \;
-RUN ls
