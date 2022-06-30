@@ -25,9 +25,10 @@ into the {body} tag of the default.hbs template --}}
 
         <h1 class="article-title">{{title}}</h1>
 
-        {{#if custom_excerpt}}
+        {{!-- MDTP Custom: don't show the excerpt --}}
+        {{!-- {{#if custom_excerpt}}
             <p class="article-excerpt">{{custom_excerpt}}</p>
-        {{/if}}
+        {{/if}} --}}
 
         <div class="article-byline">
         <section class="article-byline-content">
