@@ -10,10 +10,10 @@ RUN yarn zip
 
 FROM ghost:5.2.3
 
+# NOTE(krishan711): overwrite default entrypoint
+COPY docker-entrypoint.sh /usr/local/bin
+
 RUN apt-get update -y && apt-get install -y zip
 
 COPY --from=build /app/dist /var/lib/ghost/content.orig/themes
 RUN find /var/lib/ghost/content.orig/themes/ -name '*.zip' -exec sh -c 'unzip -d "${1%.*}" "$1"' _ {} \;
-RUN [ -d /var/lib/ghost/content.orig/themes/ ] && cp -R /var/lib/ghost/content.orig/themes /var/lib/ghost/content/themes
-RUN cat /var/lib/ghost/content.orig/themes/casper-mdtp/page.hbs
-RUN cat /var/lib/ghost/content/themes/casper-mdtp/page.hbs
