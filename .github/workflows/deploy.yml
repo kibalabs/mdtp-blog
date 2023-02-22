@@ -37,7 +37,7 @@ jobs:
           envs: DOCKER_IMAGE,NAME
           script_stop: true
           script: |
-            url="blog.milliondollartokenpage.com,blog.tokenpage.xyz"
+            url="blog.tokenpage.xyz"
             docker pull ${DOCKER_IMAGE}
             docker stop ${NAME} && docker rm ${NAME} || true
             docker run \
