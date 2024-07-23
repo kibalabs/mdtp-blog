@@ -8,7 +8,7 @@ RUN yarn install
 COPY ./theme-casper/ .
 RUN yarn zip
 
-FROM ghost:5.35.1
+FROM ghost:5.88.1
 
 # NOTE(krishan711): overwrite default entrypoint
 COPY docker-entrypoint.sh /usr/local/bin
